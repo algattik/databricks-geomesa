@@ -5,4 +5,4 @@ Includes a Maven project to build a GeoMesa uber-jar compatible with Databricks 
 
 ![airport density](images/airport-density.png)
 
-To use the library, build the project with Maven and attach the library (in the target folder) to a Databricks cluster.
+To use the library, build the project with Maven (run `mvn package` in the geomesa-spark-runtime directory) and attach the library (in the target folder) to a Databricks cluster.
