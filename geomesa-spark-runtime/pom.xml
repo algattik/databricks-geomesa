@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>geomesa-fs_2.11</artifactId>
+        <groupId>org.locationtech.geomesa</groupId>
+        <version>2.3.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>GeoMesa Filesystem Spark Runtime for Databricks</name>
+    <groupId>com.github.algattik.databricks-geomesa</groupId>
+    <artifactId>geomesa-fs-spark-runtime_2.11</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.locationtech.geomesa</groupId>
+            <artifactId>geomesa-fs-spark_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.geomesa</groupId>
+            <artifactId>geomesa-fs-datastore_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0.1</version>
+        </dependency>
+
+        <!-- only needed for packaging into the shaded jar -->
+        <dependency>
+            <groupId>org.locationtech.geomesa</groupId>
+            <artifactId>geomesa-spark-sql_${scala.binary.version}</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.geomesa</groupId>
+            <artifactId>geomesa-tools_${scala.binary.version}</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>com.carrotsearch:hppc</exclude>
+                                    <exclude>com.chuusai:shapeless_2.11</exclude>
+                                    <exclude>com.clearspring.analytics:stream</exclude>
+                                    <exclude>com.esotericsoftware:kryo-shaded</exclude>
+                                    <exclude>com.esotericsoftware:minlog</exclude>
+                                    <exclude>com.esotericsoftware.kryo:*</exclude>
+                                    <exclude>org.ow2.asm:*</exclude>
+                                    <exclude>com.fasterxml.jackson.core:jackson-annotations</exclude>
+                                    <exclude>com.fasterxml.jackson.core:jackson-core</exclude>
+                                    <exclude>com.fasterxml.jackson.core:jackson-databind</exclude>
+                                    <exclude>com.google.code.findbugs:jsr305</exclude>
+                                    <exclude>com.google.code.gson:gson</exclude>
+                                    <exclude>com.google.guava:guava</exclude>
+                                    <exclude>com.google.protobuf:protobuf-java</exclude>
+                                    <exclude>com.jcraft:jsch</exclude>
+                                    <exclude>com.thoughtworks.paranamer:paranamer</exclude>
+                                    <exclude>com.typesafe:config</exclude>
+                                    <exclude>com.vlkan:flatbuffers</exclude>
+                                    <exclude>commons-cli:commons-cli</exclude>
+                                    <exclude>commons-codec:commons-codec</exclude>
+                                    <exclude>commons-collections:commons-collections</exclude>
+                                    <exclude>commons-configuration:commons-configuration</exclude>
+                                    <exclude>commons-httpclient:commons-httpclient</exclude>
+                                    <exclude>commons-io:commons-io</exclude>
+                                    <exclude>commons-lang:commons-lang</exclude>
+                                    <exclude>commons-logging:commons-logging</exclude>
+                                    <exclude>commons-net:commons-net</exclude>
+                                    <exclude>commons-pool:commons-pool</exclude>
+                                    <exclude>io.airlift:aircompressor</exclude>
+                                    <exclude>io.netty:netty</exclude>
+                                    <exclude>javax.xml.bind:jaxb-api</exclude>
+                                    <exclude>log4j:log4j</exclude>
+                                    <exclude>org.apache.arrow:*</exclude>
+                                    <exclude>org.apache.avro:avro</exclude>
+                                    <exclude>org.apache.commons:commons-compress</exclude>
+                                    <exclude>org.apache.commons:commons-lang3</exclude>
+                                    <exclude>org.apache.commons:commons-math3</exclude>
+                                    <exclude>org.apache.curator:curator-client</exclude>
+                                    <exclude>org.apache.curator:curator-framework</exclude>
+                                    <exclude>org.apache.directory.api:api-asn1-api</exclude>
+                                    <exclude>org.apache.directory.api:api-util</exclude>
+                                    <exclude>org.apache.directory.server:apacheds-i18n</exclude>
+                                    <exclude>org.apache.directory.server:apacheds-kerberos-codec</exclude>
+                                    <exclude>org.apache.hadoop:*</exclude>
+                                    <exclude>org.apache.httpcomponents:httpclient</exclude>
+                                    <exclude>org.apache.httpcomponents:httpcore</exclude>
+                                    <exclude>org.apache.orc:orc-shims</exclude>
+                                    <exclude>org.apache.parquet:*</exclude>
+                                    <exclude>org.apache.zookeeper:zookeeper</exclude>
+                                    <exclude>org.codehaus.jackson:*</exclude>
+                                    <exclude>org.json4s:*</exclude>
+                                    <exclude>org.objenesis:objenesis</exclude>
+                                    <exclude>org.scala-lang.modules:*</exclude>
+                                    <exclude>org.scala-lang:*</exclude>
+                                    <exclude>org.slf4j:*</exclude>
+                                    <exclude>xmlenc:xmlenc</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>org/objectweb/asm/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.common</pattern>
+                                    <shadedPattern>org.locationtech.geomesa.fs.shaded.com.google.common</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.commons.codec</pattern>
+                                    <shadedPattern>org.locationtech.geomesa.fs.shaded.org.apache.commons.codec</shadedPattern>
+                                </relocation>
+                                <!-- spark also includes shapeless, relocate to avoid version conflicts -->
+                                <relocation>
+                                    <pattern>shapeless</pattern>
+                                    <shadedPattern>org.locationtech.geomesa.accumulo.shaded.shapeless</shadedPattern>
+                                </relocation>
+                                <!-- spark also includes orc/hive, relocate to avoid version conflicts -->
+                                <relocation>
+                                    <pattern>org.apache.orc</pattern>
+                                    <shadedPattern>org.locationtech.geomesa.fs.shaded.org.apache.orc</shadedPattern>
+                                </relocation>
+                                <!-- orc relies on kryo, relocate to avoid version conflicts -->
+                                <relocation>
+                                    <pattern>com.esotericsoftware.kryo</pattern>
+                                    <shadedPattern>org.locationtech.geomesa.fs.shaded.com.esotericsoftware.kryo</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                  <pattern>com.typesafe.scalalogging</pattern>
+                                  <shadedPattern>shaded.com.typesafe.scalalogging</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
